@@ -32,3 +32,53 @@
   background-size: 200% 200%;
   animation: gradientMove 6s linear infinite;
 }
+
+@layer utilities {
+  .animate-scroll-left {
+    animation: scroll-left 50s linear infinite;
+  }
+
+  .animate-scroll-right {
+    animation: scroll-right 50s linear infinite;
+  }
+
+  @keyframes scroll-left {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @keyframes scroll-right {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0); }
+  }
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee-slow {
+  animation: marquee 50s linear infinite; /* Slower for better readability */
+}
+
+.animate-marquee-slow-reverse {
+  animation: marquee 50s linear infinite reverse;
+}
+
+/* Pause on touch/hover for better UX */
+.animate-marquee-slow:active,
+.animate-marquee-slow-reverse:active {
+  animation-play-state: paused;
+}
