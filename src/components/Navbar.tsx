@@ -1,11 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useEffectEvent } from "react";
 import { useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLazyGetUserbyIdQuery } from "../redux/api/products.api";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const [getUserByIdTrigger] = useLazyGetUserbyIdQuery();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -14,6 +16,12 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => setIsOpen(false), [location]);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    getUserByIdTrigger({});
+  }, []);
 
   const navLinks = [
     { name: "Shop All", path: "/products" },
@@ -24,11 +32,9 @@ const Navbar = () => {
   const cartItems = useSelector((state) => state.addToCartReducer.cartItems);
   const cartItemsFromLocal = localStorage.getItem("cartItems")
     ? JSON.parse(localStorage.getItem("cartItems"))
-    : []  ;
-
+    : [];
 
   console.log(cartItems.length);
-  
 
   return (
     <header
@@ -89,7 +95,7 @@ const Navbar = () => {
 
           {/* Account Group */}
           <Link
-            to="/account"
+            to="/register"
             className="hidden sm:flex flex-col text-left group"
           >
             <span className="text-[8px] font-bold text-zinc-600 uppercase leading-none">
@@ -117,7 +123,9 @@ const Navbar = () => {
                 />
               </svg>
               <span className="absolute -top-1 -right-1.5 h-4 w-4 bg-blue-600 text-[9px] font-black text-white flex items-center justify-center italic shadow-[0_0_15px_rgba(37,99,235,0.5)]">
-                {cartItems.length == 0 ?  cartItemsFromLocal.length : cartItems.length || 0}
+                {cartItems.length == 0
+                  ? cartItemsFromLocal.length
+                  : cartItems.length || 0}
               </span>
             </div>
             <span className="hidden lg:block text-[10px] font-black text-white uppercase tracking-tighter self-end mb-0.5">

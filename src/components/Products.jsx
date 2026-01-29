@@ -3,6 +3,7 @@ import { useLazyGetProductsQuery } from "../redux/api/products.api";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import addToCartSlice from "../redux/reducer/addToCart.reducer";
+import toast from "react-hot-toast";
 
 const Products = () => {
   const [getprod, { data = [], isLoading }] = useLazyGetProductsQuery();
@@ -81,7 +82,10 @@ const Products = () => {
                       </button>
 
                       <button
-                        onClick={() => handleAddToCart(product)}
+                        onClick={() => {
+                          toast.success("Added to cart!");
+                          handleAddToCart(product);
+                        }}
                         className="w-full py-3 bg-white/10 text-white text-[10px] font-black uppercase tracking-widest border border-white/10 hover:bg-white/20"
                       >
                         Add to Cart
