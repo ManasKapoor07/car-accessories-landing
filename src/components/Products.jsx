@@ -1,33 +1,53 @@
 import { useEffect } from "react";
 import { useLazyGetProductsQuery } from "../redux/api/products.api";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import addToCartSlice from "../redux/reducer/addToCart.reducer";
+import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import { useAddTocartMutation } from "../redux/api/cart.api";
 
 const Products = () => {
   const [getprod, { data = [], isLoading }] = useLazyGetProductsQuery();
+  const [addProd] = useAddTocartMutation();
+
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
-  const addItemsToCart = addToCartSlice.actions.addItemToCart;
+  /* ================= AUTH ================= */
+  const token = localStorage.getItem("auth_user");
+  const userId = useSelector((state) => state.userSlice.currentUser?.id);
 
+  /* ================= FETCH PRODUCTS ================= */
   useEffect(() => {
     getprod({});
   }, [getprod]);
 
   const featuredProducts = data.slice(0, 6);
 
+  /* ================= ADD TO CART (LOGIN REQUIRED) ================= */
   const handleAddToCart = (product) => {
-    dispatch(
-      addItemsToCart({
-        productId: product.id,
-        name: product.name,
-        price: product.price,
-        image: product.images?.[0]?.imageUrl,
-        quantity: 1,
-      }),
-    );
+    if (!token) {
+      toast.error("Please login to add items to cart");
+      // navigate("/login");
+      return;
+    }
+
+    addProd({
+      productId: product.id,
+      quantity: 1,
+    }).then((res) => {
+      if (res?.data) {
+        toast.success("Added to cart");
+      }
+    });
+  };
+
+  const handleBuyNow = (product) => {
+    if (!token) {
+      toast.error("Please login to continue");
+      // navigate("/login");
+      return;
+    }
+
+    navigate(`/checkout/${product.id}`);
   };
 
   return (
@@ -72,20 +92,16 @@ const Products = () => {
                       className="w-full h-full object-cover transition duration-700 group-hover:scale-110"
                     />
 
-                    {/* DESKTOP HOVER */}
                     <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition hidden md:flex flex-col justify-end p-6 gap-3">
-                      <button
-                        onClick={() => navigate(`/checkout/${product.id}`)}
+                      {/* <button
+                        onClick={() => handleBuyNow(product)}
                         className="w-full py-3 bg-white text-black text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white"
                       >
                         Buy Now
-                      </button>
+                      </button> */}
 
                       <button
-                        onClick={() => {
-                          toast.success("Added to cart!");
-                          handleAddToCart(product);
-                        }}
+                        onClick={() => handleAddToCart(product)}
                         className="w-full py-3 bg-white/10 text-white text-[10px] font-black uppercase tracking-widest border border-white/10 hover:bg-white/20"
                       >
                         Add to Cart
@@ -119,17 +135,17 @@ const Products = () => {
                     {/* MOBILE ACTIONS */}
                     <div className="flex md:hidden gap-2 pt-2">
                       <button
-                        onClick={() => navigate(`/checkout/${product.id}`)}
+                        onClick={() => handleAddToCart(product)}
                         className="flex-1 py-3 bg-white text-black text-[10px] font-black uppercase tracking-widest"
                       >
-                        Buy Now
+                        Add to Cart
                       </button>
-                      <button
+                      {/* <button
                         onClick={() => handleAddToCart(product)}
                         className="w-12 h-12 flex items-center justify-center border border-white/10 text-white"
                       >
                         🛒
-                      </button>
+                      </button> */}
                     </div>
                   </div>
                 </div>

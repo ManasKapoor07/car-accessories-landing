@@ -112,11 +112,11 @@ const Login = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-4 bg-white text-black text-xs font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all duration-300 mt-4 disabled:opacity-50 flex justify-center items-center"
+            className="w-full py-4 cursor-pointer bg-white text-black text-xs font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all duration-300 mt-4 disabled:opacity-50 flex justify-center items-center"
           >
             {isLoading ? (
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-black rounded-full animate-bounce"></span>
+              <div className="flex  items-center gap-2">
+                <span className="w-2 h-2  bg-black rounded-full animate-bounce"></span>
                 Signing In...
               </div>
             ) : (
@@ -135,7 +135,7 @@ const Login = () => {
 
         <div className="relative my-8 border-t border-white/10">
           <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#111113] px-4 text-[10px] font-bold text-zinc-600 uppercase tracking-widest">
-            New to Car Vatika?
+            New User?
           </span>
         </div>
 

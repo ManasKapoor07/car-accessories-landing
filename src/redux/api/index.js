@@ -17,4 +17,5 @@ export const apiReducer = createApi({
     },
   }),
   endpoints: () => ({}),
+  tagTypes: ["getItems"],
 });

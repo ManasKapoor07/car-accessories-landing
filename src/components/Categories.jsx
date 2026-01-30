@@ -109,7 +109,6 @@ const Categories = () => {
                 </div>
               </div>
 
-              {/* Corner Accent — Responsive visibility */}
               <div className="absolute top-4 right-4 h-6 w-6 border-t border-r border-white/10 group-hover:border-blue-500/40 transition-colors hidden sm:block" />
             </div>
           ))}
